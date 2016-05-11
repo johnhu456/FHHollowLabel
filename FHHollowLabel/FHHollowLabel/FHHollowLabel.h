@@ -16,6 +16,9 @@
 
 @property (nonatomic, assign, getter= isHollow) BOOL hollow;
 
+@property (nonatomic, assign) CGBlendMode mode;
+
 - (void)mySetText:(NSString *)text;
 
+//- (NSString *)trueText;
 @end

@@ -8,7 +8,7 @@
 
 #import "ViewController.h"
 #import "FHHollowLabel.h"
-
+#import <objc/runtime.h>
 
 @interface ViewController ()
 
@@ -20,6 +20,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     self.view.backgroundColor = [UIColor greenColor];
     
     UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(0, 0 , self.view.frame.size.width, self.view.frame.size.height/2.0)];
@@ -27,15 +28,15 @@
     [self.view addSubview:backView];
     
     self.label = [[FHHollowLabel alloc] initWithFrame:CGRectMake(50, 50, 200, 200)];
-    self.label.text = @"fsdfsfs这";
-    self.label.backgroundColor = [UIColor blackColor];
-//    self.label.text = @"这是一行镂空文字";
+    self.label.text = @"ssss";
+    self.label.backgroundColor = [UIColor yellowColor];
+
 //    self.label.backgroundColor = [UIColor blackColor];
     
-    NSLog(@"%@",self.label.text);
+    NSLog(@"%@=====",self.label.text);
     
     //    _hollowOutLabel.alpha = 0.7;
-    self.label.font = [UIFont boldSystemFontOfSize:20];
+    self.label.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:120];
    self.label.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:self.label];
 //    label.hollow = NO;
@@ -54,7 +55,7 @@
 //    
 //    NSLog(@"%@",self.label.text);
     
-    self.label.transform = CGAffineTransformTranslate(self.label.transform, 0, 10);
+//    self.label.transform = CGAffineTransformTranslate(self.label.transform, 0, 10);
 }
 
 @end
