@@ -8,17 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
-/**一个展示镂空字的Label，想要正常使用，必须使用initWithFrame方法，而不能使用init*/
+/**设置镂空字只能使用hollowText属性，不能使用text属性。*/
 
 @interface FHHollowLabel : UILabel
 
-@property (nonatomic, strong) NSString *hollowText1;
+@property (nonatomic, strong) NSString *hollowText;
+
+@property (nonatomic, strong) UIFont *hollowFont;
+
+@property (nonatomic, strong) UIColor *hollowBackgroundColor;
 
 @property (nonatomic, assign, getter= isHollow) BOOL hollow;
 
 @property (nonatomic, assign) CGBlendMode mode;
 
-- (void)mySetText:(NSString *)text;
-
-//- (NSString *)trueText;
 @end

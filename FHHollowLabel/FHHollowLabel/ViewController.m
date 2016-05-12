@@ -28,19 +28,12 @@
     [self.view addSubview:backView];
     
     self.label = [[FHHollowLabel alloc] initWithFrame:CGRectMake(50, 50, 200, 200)];
-    self.label.text = @"ssss";
-    self.label.backgroundColor = [UIColor yellowColor];
-
-//    self.label.backgroundColor = [UIColor blackColor];
-    
-    NSLog(@"%@=====",self.label.text);
-    
-    //    _hollowOutLabel.alpha = 0.7;
-    self.label.font = [UIFont fontWithName:@"STHeitiSC-Medium" size:120];
-   self.label.textAlignment = NSTextAlignmentCenter;
+    self.label.hollowText = @"ssss";
+    self.label.hollowBackgroundColor = [UIColor yellowColor];
+    self.label.hollowFont = [UIFont fontWithName:@"STHeitiSC-Medium" size:50];
+    self.label.textAlignment = NSTextAlignmentLeft;
     [self.view addSubview:self.label];
-//    label.hollow = NO;
-//    label.hollow = YES;
+    NSLog(@"%@    %@     %@",self.label.hollowText,self.label.hollowFont,self.label.hollowBackgroundColor);
 }
 
 - (void)didReceiveMemoryWarning {
@@ -55,7 +48,7 @@
 //    
 //    NSLog(@"%@",self.label.text);
     
-//    self.label.transform = CGAffineTransformTranslate(self.label.transform, 0, 10);
+    self.label.transform = CGAffineTransformTranslate(self.label.transform, 0, 10);
 }
 
 @end
