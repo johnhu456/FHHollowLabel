@@ -10,9 +10,14 @@
 #import "FHHollowLabel.h"
 #import <objc/runtime.h>
 
+static CGFloat const kLabelWidth = 100.f;
+static CGFloat const kLabelHeight = 50.f;
+
 @interface ViewController ()
 
-@property (nonatomic, strong) FHHollowLabel *label;
+@property (nonatomic, strong) FHHollowLabel *textHollowedLabel;
+
+@property (nonatomic, strong) FHHollowLabel *backHollowedLabel;
 
 @end
 
@@ -20,20 +25,19 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    self.view.backgroundColor = [UIColor greenColor];
+    self.textHollowedLabel = [[FHHollowLabel alloc] initWithFrame:CGRectMake(CGRectGetMidX(self.view.frame) - kLabelWidth/2, 50, kLabelWidth, kLabelHeight)];
+    self.textHollowedLabel.hollowText = @"Yosemite";
+    self.textHollowedLabel.hollowBackgroundColor = [UIColor whiteColor];
+    self.textHollowedLabel.hollowFont = [UIFont fontWithName:@"STHeitiSC-Medium" size:20];
+    self.textHollowedLabel.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:self.textHollowedLabel];
     
-    UIView *backView = [[UIView alloc] initWithFrame:CGRectMake(0, 0 , self.view.frame.size.width, self.view.frame.size.height/2.0)];
-    backView.backgroundColor = [UIColor redColor];
-    [self.view addSubview:backView];
-    
-    self.label = [[FHHollowLabel alloc] initWithFrame:CGRectMake(50, 50, 200, 200)];
-    self.label.hollowText = @"ssss";
-    self.label.hollowBackgroundColor = [UIColor yellowColor];
-    self.label.hollowFont = [UIFont fontWithName:@"STHeitiSC-Medium" size:50];
-    self.label.textAlignment = NSTextAlignmentLeft;
-    [self.view addSubview:self.label];
-    NSLog(@"%@    %@     %@",self.label.hollowText,self.label.hollowFont,self.label.hollowBackgroundColor);
+    FHHollowLabel *backHollowedLabel = [[FHHollowLabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(self.textHollowedLabel.frame), 50 * 2 + kLabelHeight, kLabelWidth, kLabelHeight) hollowType:FHHollowTypeHollowBackground];
+    backHollowedLabel.hollowText = @"Yosemite";
+    backHollowedLabel.hollowBackgroundColor = [UIColor whiteColor];
+    backHollowedLabel.hollowFont = [UIFont fontWithName:@"STHeitiSC-Medium" size:20];
+    backHollowedLabel.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:backHollowedLabel];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -43,12 +47,8 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-//    self.label.hollow = !self.label.hollow;
-//    NSLog(@"%@",self.label.hollow?@"YES":@"NO");
-//    
-//    NSLog(@"%@",self.label.text);
-    
-    self.label.transform = CGAffineTransformTranslate(self.label.transform, 0, 10);
+    self.textHollowedLabel.hollowType = FHHollowTypeHollowBackground;
+    self.backHollowedLabel.hollowType = FHHollowTypeHollowDefault;
 }
 
 @end

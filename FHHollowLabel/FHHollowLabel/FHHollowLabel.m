@@ -10,18 +10,12 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 
-@interface FHHollowLabel()
-{
-    NSException *_errorExcption;
-}
-
-@end
 
 @implementation FHHollowLabel
 {
     UIFont * _font;
     UIColor * _backgroundColor;
-    CGRect _frame;
+    NSException *_errorExcption;
 }
 
 #pragma mark - 重写对应的set方法
@@ -43,6 +37,12 @@
     _hollowBackgroundColor = backgroundColor;
 }
 
+- (void)setHollowType:(FHHollowType)hollowType
+{
+    _hollowType = hollowType;
+    [self setNeedsDisplay];
+}
+
 - (void)dynamicErrorMethodWithPropertyName:(NSString *)name
 {
     NSString *errorName = [NSString stringWithFormat:@"error With set %@",name];
@@ -55,18 +55,21 @@
 
 - (void)sizeToFit
 {
-    NSException *excption = [[NSException alloc] initWithName:@"initError" reason:@"Please use method 'initWithFrame:' instead of 'init'" userInfo:nil];
-    [excption raise];
+    _errorExcption = [[NSException alloc] initWithName:@"methodError" reason:@"Can't use method 'sizeToFit'" userInfo:nil];
+    [_errorExcption raise];
 }
 
 - (instancetype)init
 {
+    _errorExcption = [[NSException alloc] initWithName:@"initError" reason:@"Please Use Method 'initWithFrame: hollowType' to init" userInfo:nil];
+    [_errorExcption raise];
     return nil;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame hollowType:(FHHollowType)type
 {
     if (self = [super initWithFrame:frame]) {
+        _hollowType = type;
     }
     return self;
 }
@@ -76,23 +79,52 @@
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
-    [self drawSubtractedText:self.hollowText inRect:rect inContext:context];
+    self.clearsContextBeforeDrawing = YES;
+    switch (self.hollowType) {
+        case FHHollowTypeHollowDefault:
+        {
+            [self drawSubtractedTextInContext:context withBlendMode:kCGBlendModeDestinationOut];
+        }
+            break;
+        case FHHollowTypeHollowBackground:
+        {
+            [self drawSubtractedTextInContext:context withBlendMode:kCGBlendModeNormal];
+            self.layer.borderColor = self.hollowBackgroundColor.CGColor;
+            self.layer.borderWidth = 2.0;
+        }
+            break;
+        default:
+            break;
+    }
 }
 
-- (void)drawSubtractedText:(NSString *)text inRect:(CGRect)rect inContext:(CGContextRef)context {
+- (void)drawSubtractedTextInContext:(CGContextRef)context withBlendMode:(CGBlendMode)mode {
     // Save context state to not affect other drawing operations
     CGContextSaveGState(context);
     
     // Magic blend mode
-    CGContextSetBlendMode(context, kCGBlendModeDestinationOut);
+    CGContextSetBlendMode(context, mode);
 
     // Label to center and adjust font automatically
     UILabel *label = [[UILabel alloc] initWithFrame:self.frame];
     label.font = self.hollowFont;
     label.adjustsFontSizeToFitWidth = self.adjustsFontSizeToFitWidth;
-    label.text = text;
+    label.text = self.hollowText;
     label.textAlignment = self.textAlignment;
-    label.backgroundColor = self.hollowBackgroundColor;
+    switch (mode) {
+        case kCGBlendModeDestinationOut:
+        {
+            label.backgroundColor = self.hollowBackgroundColor;
+        }
+            break;
+        case kCGBlendModeNormal:
+        {
+            label.backgroundColor = [UIColor clearColor];
+            label.textColor = self.hollowBackgroundColor;
+        }
+        default:
+            break;
+    }
     [label.layer drawInContext:context];
     
     // Restore the state of other drawing operations

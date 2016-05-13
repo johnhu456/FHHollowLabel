@@ -8,7 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
-/**设置镂空字只能使用hollowText属性，不能使用text属性。*/
+/**设置镂空字（TypeDefault）只能使用hollowText,hollowFont,hollowBackgroundColor属性，不能使用原生属性，否则没有镂空效果。*/
+
+typedef NS_ENUM(NSInteger){
+    FHHollowTypeHollowDefault = 0,
+    FHHollowTypeHollowBackground = 1
+}FHHollowType;
+
 
 @interface FHHollowLabel : UILabel
 
@@ -18,8 +24,10 @@
 
 @property (nonatomic, strong) UIColor *hollowBackgroundColor;
 
+@property (nonatomic, assign) FHHollowType hollowType;
+
 @property (nonatomic, assign, getter= isHollow) BOOL hollow;
 
-@property (nonatomic, assign) CGBlendMode mode;
+- (instancetype)initWithFrame:(CGRect)frame hollowType:(FHHollowType)type;
 
 @end
