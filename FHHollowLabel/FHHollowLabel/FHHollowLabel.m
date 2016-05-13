@@ -83,6 +83,7 @@
     switch (self.hollowType) {
         case FHHollowTypeHollowDefault:
         {
+            self.layer.borderWidth = 0;
             [self drawSubtractedTextInContext:context withBlendMode:kCGBlendModeDestinationOut];
         }
             break;

@@ -32,12 +32,12 @@ static CGFloat const kLabelHeight = 50.f;
     self.textHollowedLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:self.textHollowedLabel];
     
-    FHHollowLabel *backHollowedLabel = [[FHHollowLabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(self.textHollowedLabel.frame), 50 * 2 + kLabelHeight, kLabelWidth, kLabelHeight) hollowType:FHHollowTypeHollowBackground];
-    backHollowedLabel.hollowText = @"Yosemite";
-    backHollowedLabel.hollowBackgroundColor = [UIColor whiteColor];
-    backHollowedLabel.hollowFont = [UIFont fontWithName:@"STHeitiSC-Medium" size:20];
-    backHollowedLabel.textAlignment = NSTextAlignmentCenter;
-    [self.view addSubview:backHollowedLabel];
+    self.backHollowedLabel = [[FHHollowLabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(self.textHollowedLabel.frame), 50 * 2 + kLabelHeight, kLabelWidth, kLabelHeight) hollowType:FHHollowTypeHollowBackground];
+    _backHollowedLabel.hollowText = @"Yosemite";
+    _backHollowedLabel.hollowBackgroundColor = [UIColor whiteColor];
+    _backHollowedLabel.hollowFont = [UIFont fontWithName:@"STHeitiSC-Medium" size:20];
+    _backHollowedLabel.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:_backHollowedLabel];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -47,8 +47,9 @@ static CGFloat const kLabelHeight = 50.f;
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    self.textHollowedLabel.hollowType = FHHollowTypeHollowBackground;
-    self.backHollowedLabel.hollowType = FHHollowTypeHollowDefault;
+    FHHollowType tempType = self.textHollowedLabel.hollowType;
+    self.textHollowedLabel.hollowType = self.backHollowedLabel.hollowType;
+    self.backHollowedLabel.hollowType = tempType;
 }
 
 @end
