@@ -74,7 +74,6 @@
     return self;
 }
 
-
 #pragma mark - 绘制
 - (void)drawRect:(CGRect)rect
 {
