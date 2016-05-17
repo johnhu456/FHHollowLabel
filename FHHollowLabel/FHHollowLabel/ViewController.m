@@ -19,6 +19,7 @@ static CGFloat const kLabelHeight = 50.f;
 
 @property (nonatomic, strong) FHHollowLabel *backHollowedLabel;
 
+@property (nonatomic, strong) FHLyricLabel *lyricLabel;
 @end
 
 @implementation ViewController
@@ -38,6 +39,15 @@ static CGFloat const kLabelHeight = 50.f;
     _backHollowedLabel.hollowFont = [UIFont fontWithName:@"STHeitiSC-Medium" size:20];
     _backHollowedLabel.textAlignment = NSTextAlignmentCenter;
     [self.view addSubview:_backHollowedLabel];
+    
+    self.lyricLabel = [[FHLyricLabel alloc] initWithFrame:CGRectMake(CGRectGetMinX(self.textHollowedLabel.frame), 50 * 4 + kLabelHeight, kLabelWidth, kLabelHeight) andDuration:0.5];
+    self.lyricLabel.hollowText = @"Yosemite";
+    self.lyricLabel.hollowBackgroundColor = [UIColor whiteColor];
+    self.lyricLabel.hollowFont = [UIFont fontWithName:@"STHeitiSC-Medium" size:20];
+    self.lyricLabel.textAlignment = NSTextAlignmentCenter;
+    self.lyricLabel.lyricColor = [UIColor redColor];
+    [self.view addSubview:self.lyricLabel];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -50,6 +60,18 @@ static CGFloat const kLabelHeight = 50.f;
     FHHollowType tempType = self.textHollowedLabel.hollowType;
     self.textHollowedLabel.hollowType = self.backHollowedLabel.hollowType;
     self.backHollowedLabel.hollowType = tempType;
+    
+    if (self.lyricLabel.lyricState == FHLyricStateAnimating)
+    {
+        [self.lyricLabel pause];
+    }
+    else if (self.lyricLabel.lyricState == FHLyricStateFinished)
+    {
+        [self.lyricLabel stop];
+    }
+    else{
+        [self.lyricLabel start];
+    }
 }
 
 @end

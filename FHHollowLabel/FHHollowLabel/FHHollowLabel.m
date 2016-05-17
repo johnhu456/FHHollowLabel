@@ -131,3 +131,117 @@
     CGContextRestoreGState(context);
 }   
 @end
+
+#pragma mark - FHLyricLabel
+@interface FHLyricLabel()
+{
+    UIColor *_lyricColor;
+}
+@property (nonatomic, strong) UILabel *backMoveLabel;
+
+@property (nonatomic, strong) FHHollowLabel *realHollowLabel;
+
+@property (nonatomic, strong) NSTimer *lyricTimer;
+
+@property (nonatomic, assign, readwrite) FHLyricState lyricState;
+
+@property (nonatomic, assign) CGFloat countDuration;
+//
+//@property (nonatomic, assign, readwrite) BOOL animating;
+//
+//@property (nonatomic, assign, readwrite) BOOL finished;
+
+@end
+
+@implementation FHLyricLabel
+
+/**防止两边超出的保护宽度*/
+static CGFloat const kSideSafeWith = 2;
+
+- (UIColor *)lyricColor
+{
+    if (_lyricColor == nil){
+        _lyricColor = [UIColor blackColor];
+    }
+    return _lyricColor;
+}
+
+- (void)setLyricColor:(UIColor *)lyricColor
+{
+    _lyricColor = lyricColor;
+    self.backMoveLabel.backgroundColor = _lyricColor;
+}
+
+
+- (UILabel *)backMoveLabel
+{
+    if (_backMoveLabel == nil) {
+        _backMoveLabel = [[UILabel alloc] initWithFrame:CGRectMake(kSideSafeWith, 0, 0, self.bounds.size.height)];
+        _backMoveLabel.backgroundColor = self.lyricColor;
+    }
+    return _backMoveLabel;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame andDuration:(CGFloat)duration
+{
+    if(self = [super initWithFrame:frame hollowType:FHHollowTypeHollowDefault]){
+        _duration = duration;
+        _lyricState = FHLyricStateStandBy;
+        _countDuration = 0;
+        self.backgroundColor = [UIColor clearColor];
+        [self setupSubviews];
+    }
+    return self;
+}
+
+- (void)setupSubviews
+{
+    self.realHollowLabel = [[FHHollowLabel alloc] initWithFrame:self.bounds hollowType:FHHollowTypeHollowDefault];
+    self.realHollowLabel.hollowText = self.hollowText;
+    self.realHollowLabel.hollowFont = self.hollowFont;
+    self.realHollowLabel.hollowBackgroundColor = self.hollowBackgroundColor;
+    [self addSubview:self.backMoveLabel];
+    [self addSubview:self.realHollowLabel];
+}
+
+#pragma mark - LyricOperate
+- (void)start
+{
+    if ([self.lyricTimer isValid] && self.lyricState != FHLyricStateStandBy) {
+        return;
+    }
+    self.lyricTimer = [NSTimer scheduledTimerWithTimeInterval:0.01 target:self selector:@selector(moveByProgress) userInfo:nil  repeats:YES];
+}
+
+- (void)pause
+{
+    [self.lyricTimer invalidate];
+    self.lyricState = FHLyricStateUnFinished;
+}
+
+- (void)stop
+{
+    [self pause];
+    self.backMoveLabel.frame = CGRectMake(kSideSafeWith, 0, 0, self.bounds.size.height);
+    self.lyricState = FHLyricStateStandBy;
+}
+- (void)moveToProgress:(CGFloat)progress withAnimate:(BOOL)animate
+{
+    
+}
+
+-(void)moveByProgress{
+    if (self.lyricState != FHLyricStateAnimating) {
+        self.lyricState = FHLyricStateAnimating;
+    }
+    if (_countDuration >= _duration) {
+        [self.lyricTimer invalidate];
+        self.lyricState = FHLyricStateFinished;
+        _countDuration = 0;
+        return ;
+    }
+    CGFloat stepWidth = (CGFloat)(self.bounds.size.width/_duration)/100.0;
+    self.backMoveLabel.frame = CGRectMake(kSideSafeWith, 0, self.backMoveLabel.frame.size.width + stepWidth, self.bounds.size.height);
+    _countDuration += 0.01;
+}
+@end
