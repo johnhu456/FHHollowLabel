@@ -227,6 +227,18 @@ static CGFloat const kSideSafeWith = 2;
 }
 - (void)moveToProgress:(CGFloat)progress withAnimate:(BOOL)animate
 {
+    __weak typeof(self) weakSelf = self;
+    CGFloat desWidth = self.bounds.size.width * progress;
+    if (animate) {
+        [UIView animateWithDuration:0.2 animations:^{
+            weakSelf.backMoveLabel.frame = CGRectMake(kSideSafeWith, 0, desWidth, self.bounds.size.height);
+        }];
+    }
+    else
+    {
+        self.backMoveLabel.frame = CGRectMake(kSideSafeWith, 0, desWidth, self.bounds.size.height);
+    }
+    _countDuration = progress * _duration;
     
 }
 

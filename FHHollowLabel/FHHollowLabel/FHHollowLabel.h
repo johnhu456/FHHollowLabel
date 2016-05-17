@@ -60,7 +60,6 @@ typedef NS_ENUM(NSInteger){
 
 - (void)stop;
 
-//Unfinished
-//- (void)moveToProgress:(CGFloat)progress withAnimate:(BOOL)animate;
+- (void)moveToProgress:(CGFloat)progress withAnimate:(BOOL)animate;
 
 @end

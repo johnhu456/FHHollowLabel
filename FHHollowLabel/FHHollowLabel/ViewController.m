@@ -72,6 +72,7 @@ static CGFloat const kLabelHeight = 50.f;
     else{
         [self.lyricLabel start];
     }
+//    [self.lyricLabel moveToProgress:0.5 withAnimate:YES];
 }
 
 @end
